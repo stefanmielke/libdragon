@@ -658,12 +658,12 @@ void graphics_set_font( sprite_t *font, int tab_width )
  */
 void graphics_draw_character( display_context_t disp, int x, int y, char ch )
 {
-    if ( disp == 0 ) { return; }
+    if( disp == 0 ) { return; }
 
 	int depth = __bitdepth;
 
     // setting default font if none was set previously
-    if ( sprite_font.sprite == NULL )
+    if( sprite_font.sprite == NULL )
     {
         sprite_font.sprite = (sprite_t *)(depth == 2 ? __font_data_16 : __font_data_32);
     }
@@ -679,21 +679,21 @@ void graphics_draw_character( display_context_t disp, int x, int y, char ch )
 	const int tx = x - sx;
 	const int ty = y - sy;
 
-	if ( depth == 2 )
+	if( depth == 2 )
     {
         uint16_t *buffer = (uint16_t *)__get_buffer( disp );
 		uint16_t *sp_data = (uint16_t *)sprite_font.sprite->data;
 
-		for ( int yp = sy; yp < ey; yp++ )
+		for( int yp = sy; yp < ey; yp++ )
         {
 			const register int run = yp * sprite_font.sprite->width;
 
-			for ( int xp = sx; xp < ex; xp++ )
+			for( int xp = sx; xp < ex; xp++ )
             {
 				const char c = sp_data[xp + run];
-				if ( trans )
+				if( trans )
                 {
-					if ( c & 0x80 )
+					if( c & 0x80 )
                     {
 						__set_pixel( buffer, tx + xp, ty + yp, f_color );
 					}
@@ -710,16 +710,16 @@ void graphics_draw_character( display_context_t disp, int x, int y, char ch )
 		uint32_t *buffer = (uint32_t *)__get_buffer( disp );
 		uint32_t *sp_data = (uint32_t *)sprite_font.sprite->data;
 
-		for ( int yp = sy; yp < ey; yp++ )
+		for( int yp = sy; yp < ey; yp++ )
         {
 			const register int run = yp * sprite_font.sprite->width;
 
-			for ( int xp = sx; xp < ex; xp++ )
+			for( int xp = sx; xp < ex; xp++ )
             {
 				const char c = sp_data[xp + run];
-				if ( trans )
+				if( trans )
                 {
-					if ( c & 0x80 )
+					if( c & 0x80 )
                     {
 						__set_pixel( buffer, tx + xp, ty + yp, f_color );
 					}
