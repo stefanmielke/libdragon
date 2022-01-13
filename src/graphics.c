@@ -45,10 +45,10 @@
  * the first #graphics_draw_character call if #graphics_set_font was not called.
  */
 static struct {
-	sprite_t *sprite;
-	int tab_width;
-	int font_width;
-	int font_height;
+    sprite_t *sprite;
+    int tab_width;
+    int font_width;
+    int font_height;
 } sprite_font = {
     .tab_width = 5,
     .font_width = 8,
@@ -684,26 +684,26 @@ void graphics_draw_character( display_context_t disp, int x, int y, char ch )
         uint16_t *buffer = (uint16_t *)__get_buffer( disp );
         uint16_t *sp_data = (uint16_t *)sprite_font.sprite->data;
 
-    for( int yp = sy; yp < ey; yp++ )
-    {
-        const register int run = yp * sprite_font.sprite->width;
-
-        for( int xp = sx; xp < ex; xp++ )
+        for( int yp = sy; yp < ey; yp++ )
         {
-            const char c = sp_data[xp + run];
-            if( trans )
+            const register int run = yp * sprite_font.sprite->width;
+
+            for( int xp = sx; xp < ex; xp++ )
             {
-                if( c & 0x80 )
+                const char c = sp_data[xp + run];
+                if( trans )
                 {
-                    __set_pixel( buffer, tx + xp, ty + yp, f_color );
+                    if( c & 0x80 )
+                    {
+                        __set_pixel( buffer, tx + xp, ty + yp, f_color );
+                    }
+                }
+                else
+                {
+                    __set_pixel( buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color );
                 }
             }
-            else
-            {
-                __set_pixel( buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color );
-            }
         }
-    }
 	}
     else
     {
