@@ -762,9 +762,9 @@ void graphics_draw_text( display_context_t disp, int x, int y, const char * cons
     int ty = y;
     const char *text = (const char *)msg;
 
-    while (*text)
+    while( *text )
     {
-        switch (*text)
+        switch( *text )
         {
             case '\r':
             case '\n':
@@ -778,7 +778,7 @@ void graphics_draw_text( display_context_t disp, int x, int y, const char * cons
                 tx += sprite_font.font_width * sprite_font.tab_width;
                 break;
             default:
-                graphics_draw_character(disp, tx, ty, *text);
+                graphics_draw_character( disp, tx, ty, *text );
                 tx += sprite_font.font_width;
                 break;
         }
