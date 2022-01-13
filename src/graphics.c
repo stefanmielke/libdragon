@@ -642,9 +642,6 @@ void graphics_set_font( sprite_t *font, int tab_width )
 /**
  * @brief Draw a character to the screen using the built-in font
  *
- * @todo Need a set font mechanism.
- * @todo Need to look up the width and height from the font instead of assuming it is 8x8.
- *
  * Draw a character from the built-in font to the screen.  This function does not support alpha blending, 
  * only binary transparency.  If the background color is fully transparent, the font is drawn with no
  * background.  Otherwise, the font is drawn on a fully colored background.  The foreground and background
@@ -661,75 +658,75 @@ void graphics_set_font( sprite_t *font, int tab_width )
  */
 void graphics_draw_character( display_context_t disp, int x, int y, char ch )
 {
-    if (disp == 0) { return; }
+    if ( disp == 0 ) { return; }
 
 	int depth = __bitdepth;
 
     // setting default font if none was set previously
-    if (sprite_font.sprite == NULL)
+    if ( sprite_font.sprite == NULL )
     {
         sprite_font.sprite = (sprite_t *)(depth == 2 ? __font_data_16 : __font_data_32);
     }
 
 	/* Figure out if they want the background to be transparent */
-	int trans = __is_transparent(depth, b_color);
+	int trans = __is_transparent( depth, b_color );
 
-	const int sx = (ch % sprite_font.sprite->hslices) * sprite_font.font_width;
-	const int sy = (ch / sprite_font.sprite->hslices) * sprite_font.font_height;
+	const int sx = ( ch % sprite_font.sprite->hslices ) * sprite_font.font_width;
+	const int sy = ( ch / sprite_font.sprite->hslices ) * sprite_font.font_height;
 	const int ex = sx + sprite_font.font_width;
 	const int ey = sy + sprite_font.font_height;
 
 	const int tx = x - sx;
 	const int ty = y - sy;
 
-	if (depth == 2)
+	if ( depth == 2 )
     {
-		uint16_t *buffer = (uint16_t *)__get_buffer(disp);
+        uint16_t *buffer = (uint16_t *)__get_buffer( disp );
 		uint16_t *sp_data = (uint16_t *)sprite_font.sprite->data;
 
-		for (int yp = sy; yp < ey; yp++)
+		for ( int yp = sy; yp < ey; yp++ )
         {
 			const register int run = yp * sprite_font.sprite->width;
 
-			for (int xp = sx; xp < ex; xp++)
+			for ( int xp = sx; xp < ex; xp++ )
             {
 				const char c = sp_data[xp + run];
-				if (trans)
+				if ( trans )
                 {
-					if (c & 0x80)
+					if ( c & 0x80 )
                     {
-						__set_pixel(buffer, tx + xp, ty + yp, f_color);
+						__set_pixel( buffer, tx + xp, ty + yp, f_color );
 					}
 				}
                 else
                 {
-					__set_pixel(buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color);
+					__set_pixel( buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color );
 				}
 			}
 		}
 	}
     else
     {
-		uint32_t *buffer = (uint32_t *)__get_buffer(disp);
+		uint32_t *buffer = (uint32_t *)__get_buffer( disp );
 		uint32_t *sp_data = (uint32_t *)sprite_font.sprite->data;
 
-		for (int yp = sy; yp < ey; yp++)
+		for ( int yp = sy; yp < ey; yp++ )
         {
 			const register int run = yp * sprite_font.sprite->width;
 
-			for (int xp = sx; xp < ex; xp++)
+			for ( int xp = sx; xp < ex; xp++ )
             {
 				const char c = sp_data[xp + run];
-				if (trans)
+				if ( trans )
                 {
-					if (c & 0x80)
+					if ( c & 0x80 )
                     {
-						__set_pixel(buffer, tx + xp, ty + yp, f_color);
+						__set_pixel( buffer, tx + xp, ty + yp, f_color );
 					}
 				}
                 else
                 {
-					__set_pixel(buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color);
+					__set_pixel( buffer, tx + xp, ty + yp, (c & 0x80) ? f_color : b_color );
 				}
 			}
 		}
