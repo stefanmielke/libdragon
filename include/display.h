@@ -77,6 +77,9 @@ display_context_t display_lock();
 void display_show(display_context_t disp);
 void display_close();
 
+void *display_get_buffer( display_context_t disp );
+void *display_get_current_buffer();
+
 #ifdef __cplusplus
 }
 #endif

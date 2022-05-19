@@ -273,8 +273,8 @@ void display_init( resolution_t res, bitdepth_t bit, uint32_t num_buffers, gamma
     /* Can't have the video interrupt happening here */
     disable_interrupts();
 
-    /* Ensure that buffering is either double or twiple */
-    if( num_buffers != 2 && num_buffers != 3 )
+    /* Ensure that buffering is either single, double or triple */
+    if( num_buffers != 1 && num_buffers != 2 && num_buffers != 3 )
     {
         __buffers = NUM_BUFFERS;
     }
@@ -546,7 +546,8 @@ void display_show( display_context_t disp )
     int i = disp - 1;
 
     /* This should match, or something went awry */
-    assertf( i == now_drawing, "display_show invoked on non-locked display" );
+    // removing line below to allow for single buffer
+    // assertf( i == now_drawing, "display_show invoked on non-locked display" );
 
     /* Ensure we display this next time */
     now_drawing = -1;
@@ -574,6 +575,16 @@ void display_show_force( display_context_t disp )
     display_show(disp);
     __display_callback();
     enable_interrupts();
+}
+
+void *display_get_buffer( display_context_t disp )
+{
+    return buffer[disp - 1];
+}
+
+void *display_get_current_buffer()
+{
+    return buffer[now_showing];
 }
 
 /** @} */ /* display */
